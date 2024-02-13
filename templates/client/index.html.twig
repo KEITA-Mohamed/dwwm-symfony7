@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ClientController!{% endblock %}
+
+{% block body %}
+    <div class="m-auto w80 my-4">
+        <h1 class="titre center text-light">LISTE CLIENTS</h1>
+        <div class="div-btn">
+            <a href="javascript:creer()" class="btn btn-md btn-success"><i class="fas fa-plus">Nouveau client</i></a>
+            <a href="javascript:afficher()" class="btn btn-md btn-success"><i class="fas fa-shower">Afficher</i></a>
+            <a href="javascript:modifier()" class="btn btn-md btn-primary"><i class="fas fa-highlighter">Modifier</i></a>
+            <a href="javascript:supprimer()" class="btn btn-md btn-danger"><i class="fas fa-trash">Supprimer</i></a>
+            <a href="javascript:writeExcel()" class="btn btn-md btn-success"><i class="fas fa-file-excel">Excel</i></a>
+        </div>
+       <table class="w100">
+            <thead id="thead_client">
+                <tr class="bg-dark">
+
+                    <th></th>
+                    <th>ID</th>
+                    <th>CODE</th>
+                    <th>Nom</th>
+                    <th>ADRESSE</th>
+                </tr>
+            </thead>
+            <tbody id="tbody_client">
+                {%for client in clients%}
+                <tr>
+                    <td><input type="checkbox" id="{{client.id}}" name="check" value={{client.id}} onclick="onlyOne(this)"></td>
+                    <td>{{client.id}}</td>
+                    <td>{{client.numClient}}</td>
+                    <td>{{client.nomClient}}</td>
+                    <td>{{client.adresseClient}}</td>
+                </tr>
+                {%endfor%}
+            </tbody>
+            <tfoot id="tfoot_client">
+                <tr class="bg-dark">
+                    <td class="center" colspan="5">Nombre client {{nbre}}</td>
+                </tr>
+            </tfoot>
+       </table>
+    </div>
+    {%endblock%}
+    {%block script%}
+
+    <script>
+        const url_edit="/client/edit/id";
+        const url_delete="/client/delete/id";
+
+        function supprimer(){
+            const id = getIdChecked('check');
+            //alert(id);
+            if(id==0){
+                alert("Selectionner bien une ligne");
+                return;
+            }
+
+            const response=confirm("Voulez-vous bien supprimer le client?");
+            if(response){
+
+                const url=url_delete.replace('id',id);
+                document.location.href=url;
+            }
+        }
+
+
+        function modifier(){
+            const id=getIdChecked('check');
+            //alert(id);
+
+            const url=url_edit.replace('id',id);
+            document.location.href=url;
+        }
+
+        function creer(){
+            const url=url_edit.replace('id',0);
+            document.location.href=url;
+        }
+    </script>
+    {% endblock %}

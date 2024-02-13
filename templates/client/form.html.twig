@@ -1,0 +1,14 @@
+{%extends "base.html.twig"%}
+{%block title%}Client{%endblock%}
+{%block body%}
+    <div>
+        <h1 class="m-auto w50 my-4">SAISIE Client</h1>
+        {{form_start(form)}}
+        {{form_widget(form)}}
+        <div class="div-btn">
+            <a href="/client" class="btn btn-md btn-success my-4">Retour à la liste</a>
+            <input type="submit" class="btn btn-lg btn-primary my-4" value="Enregister">
+        </div>
+        {{form_end(form)}}
+    </div>
+{%endblock%}

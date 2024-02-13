@@ -1,18 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Article index{% endblock %}
+{% block title %}Article{% endblock %}
 
 {% block body %}
-    <h1>Article index</h1>
-
+<div class="m-auto w70 my-4">
+    <h1 class"titre text-light center">Liste Article</h1>
+    <div class="d-flex justify-content-between py-2">
+    <a href="{{ path('app_article_new') }}" class="btn btn-md btn-primary"><i class="fas fa-cart-pl"></i>Nouvel Article</a>
+    <a href="javascript:writeExcel()" class="btn btn-md btn-success"><i class="fas fa-file-excel"></i>Excel</a>
+    </div>
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>NumArticle</th>
-                <th>Designation</th>
-                <th>PrixUnitaire</th>
-                <th>actions</th>
+                <th class="w10">Id</th>
+                <th class="w10">NumArticle</th>
+                <th class="w30">Designation</th>
+                <th class="w20">PrixUnitaire</th>
+                <th class="w30 center">actions</th>
             </tr>
         </thead>
         <tbody>
@@ -21,19 +25,18 @@
                 <td>{{ article.id }}</td>
                 <td>{{ article.numArticle }}</td>
                 <td>{{ article.designation }}</td>
-                <td>{{ article.prixUnitaire }}</td>
-                <td>
-                    <a href="{{ path('app_article_show', {'id': article.id}) }}">show</a>
-                    <a href="{{ path('app_article_edit', {'id': article.id}) }}">edit</a>
+                <td class="">{{ article.prixUnitaire }}</td>
+                <td class="d-flex justify-content-between px-4">
+                    <a class="btn btn-sm btn-success" href="{{ path('app_article_show', {'id': article.id}) }}"><i class="fas fa-eye"></i>Afficher</a>
+                    <a class="btn btn-sm btn-primary" href="{{ path('app_article_edit', {'id': article.id}) }}"><i class="fas fa-marker"></i>Modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="5">no records found</td>
+                <td colspan="5">Aucun enregistrement</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('app_article_new') }}">Create new</a>
+</div>
 {% endblock %}
