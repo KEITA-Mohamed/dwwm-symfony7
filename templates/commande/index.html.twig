@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande index{% endblock %}
+
+{% block body %}
+
+<div class="m-auto w80 my-4">
+    <h1>Commande</h1>
+    <div class="div-btn m-2 print-none">  
+    <a class="btn btn-sm btn-success" href="{{ path('app_commande_new') }}">Nouvelle Commande</a>
+    <a class="btn btn-sm btn-success" href="javascript:window.print()">Imprimer</a>
+    <a class="btn btn-sm btn-success" href="javascript:void()">Excel</a>
+    </div>
+
+    <table class="w100">
+        <thead>
+            <tr class="bg-dark">
+                <th>Id</th>
+                <th>NumCommande</th>
+                <th>DateCommande</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for commande in commandes %}
+            <tr>
+                <td>{{ commande.id }}</td>
+                <td>{{ commande.numCommande }}</td>
+                <td>{{ commande.dateCommande ? commande.dateCommande|date('Y-m-d H:i:s') : '' }}</td>
+                <td class="d-btn p-2">
+                    <a class="btn btn-sm btn-success" href="{{ path('app_commande_show', {'id': commande.id}) }}"><i class="fas fa-eye-slash"></i>Affichage</a>
+                    <a class="btn btn-sm btn-primary" href="{{path('app_commande_content',{'id':commande.id})}}"><i class="fab fa-connectdevelop"></i>Contenu</a>
+                    <a class="btn btn-sm btn-primary" href="{{ path('app_commande_edit', {'id': commande.id}) }}">Modification</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}

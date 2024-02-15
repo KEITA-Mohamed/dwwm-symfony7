@@ -5,15 +5,19 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Form\ClientType;
 use App\Repository\ClientRepository;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+#[ROUTE('/client')]
+
 class ClientController extends AbstractController
 {
-    #[Route('/client', name: 'app_client')]
+    #[Route('/', name: 'app_client')]
     public function index(ClientRepository $cr): Response//ClientRepository = ClientManager
     {
         $clients=$cr->findAll();
@@ -26,7 +30,62 @@ class ClientController extends AbstractController
     }
 
 
-    #[Route('/client/delete/{id}', name: 'app_client_delete')]
+
+
+    #[Route("/export/excel", name:"app_client_export_excel")]
+    public function exportExcel(EntityManagerInterface $em):Response
+    {
+
+        $file="../public/modele-document/modele-fichier-client.xlsx";
+        $spreadsheet=IOFactory::load($file);
+
+        $sheet=$spreadsheet->getActiveSheet();
+        $clients=$em->getRepository(Client::class)->findAll();
+
+        $row=4;
+
+        foreach($clients as $client){
+
+            $sheet->insertNewRowBefore($row);
+            $sheet->setCellValue("A$row",$client->getNumClient());
+            $sheet->setCellValue("B$row",$client->getNomClient());
+            $sheet->setCellValue("C$row",$client->getAdresseClient());
+
+            $row++; //$row+=
+        } 
+        
+        
+        $row--;
+        $nbre=count($clients);
+        $sheet->setCellValue("A$row","Nombre de clients :$nbre");
+
+        //--------------------------sauvegarder des données dans le fichier list_clients.xlsx
+
+        $target="../public/partage-document/liste_clients.xlsx";
+        $writer=new Xlsx($spreadsheet);
+        $writer->save($target);
+
+        //return $this->redirectToRoute("app_client");
+        
+        echo "Exportation termiiné";
+
+        exit;
+
+    }
+
+
+
+    #[ROUTE('/show/{id}', name: 'app_client_show')]
+    public function show(ClientRepository $cr,$id)
+    {
+        $client=$cr->find($id);
+        return $this->render("client/show.html.twig",[
+            'client'=>$client,
+        ]);
+    }
+
+
+    #[Route('/delete/{id}', name: 'app_client_delete')]
     public function delete(EntityManagerInterface $em,$id)
     {
 
@@ -36,7 +95,10 @@ class ClientController extends AbstractController
         return $this->redirectToRoute("app_client");
     }
 
-    #[Route('/client/edit/{id}', name:"app_client_edit", methods:["POST","GET"])]
+
+    
+
+    #[Route('/edit/{id}', name:"app_client_edit", methods:["POST","GET"])]
     public function edit(EntityManagerInterface $em, ClientRepository $cr, $id,Request $request){
 
         $id=(int) $id;
@@ -55,7 +117,7 @@ class ClientController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()){
 
-            $em->persist($client); // hidrater l'entité $client
+            $em->persist($client); // preparation de l'entité $client
             $em->flush(); // enregistrer les données saisie dans la bdd
 
             return $this->redirectToRoute("app_client");
