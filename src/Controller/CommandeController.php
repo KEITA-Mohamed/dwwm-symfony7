@@ -116,6 +116,7 @@ class CommandeController extends AbstractController
             $montant=$quantite*$prixUnitaire;
             $total+=$montant;
             $rows[]=[
+                
                 'id'=>$ligne->getId(),
                 'numArticle'=>$article->getNumArticle(),
                 'designation'=>$article->getDesignation(),

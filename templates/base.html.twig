@@ -22,10 +22,16 @@
             <div class="collapse navbar-collapse justify-content-between" id="nav">
                 <ul class="navbar-nav px-2">
                     <li class="nav-item"><a href="/" class="nav-link text-light fw-bold">Accueil</a></li>
+
+                        {% if(is_granted('ROLE_DEPOT')) %}
+
                         <li class="nav-item"><a href="/article" class="nav-link text-light fw-bold">Article</a></li>
                         <li class="nav-item"><a href="/" class="nav-link text-light fw-bold">Article-Ajax</a>
                         </li>
                         <li class="nav-item"><a href="{{path('app_client')}}" class="nav-link text-light fw-bold">Client</a></li>
+                        {% endif %}
+                        
+                        {%if(is_granted('ROLE_CAISSE'))%}
                         <li class="nav-item dropdown"><a href="" class="nav-link text-light fw-bold dropdown-toggle"
                                 data-bs-toggle="dropdown" data-bs-auto-close="outside">Commande</a>
                             <ul class="dropdown-menu">
@@ -40,17 +46,19 @@
                                 </li>
                             </ul>
                         </li>
+                        {% endif %}
                   
                     <!-- <li class="nav-item"><a href="user" class="nav-link text-light fw-bold">User</a></li> -->
                     <!-- <li class="nav-item"><a href="" class="nav-link text-light fw-bold">Parametre</a></li> -->
-                   
+                    {% if(is_granted('ROLE_ADMIN')) %}
                         <li class="nav-item dropdown"><a href="" class="nav-link text-primary text-light fw-bold dropdown-toggle"
                                 data-bs-toggle="dropdown">Parametre</a>
                             <ul class="dropdown-menu">
-                                <li class="nav-item"><a href="/" class="nav-link">User</a></li>
-                                <li class="nav-item"><a href="/" class="nav-link">Role</a></li>
+                                <li class="nav-item"><a href="{{path('app_user_index')}}" class="nav-link">User</a></li>
+                                <li class="nav-item"><a href="{{path('app_role_index')}}" class="nav-link">Role</a></li>
                             </ul>
                         </li>
+                    {% endif %}
                  
                     <!-- <li class="nav-item"><a href="user&action=login" class="nav-link text-light fw-bold">Se connecter</a></li> -->
                     <!-- <li class="nav-item"><a href="user&action=logout" class="nav-link text-light fw-bold">Se deconnecter</a></li> -->
